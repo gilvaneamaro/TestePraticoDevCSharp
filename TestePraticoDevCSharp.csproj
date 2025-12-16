@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Entities\Cliente.cs" />
+    <Compile Include="Domain\Entities\ItemVenda.cs" />
+    <Compile Include="Domain\Entities\Produto.cs" />
+    <Compile Include="Domain\Entities\Venda.cs" />
+    <Compile Include="Domain\ValueObjects\Email.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +80,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Application\DTOs\" />
+    <Folder Include="Application\Reports\" />
+    <Folder Include="Application\Services\" />
+    <Folder Include="Domain\Repositories\" />
+    <Folder Include="Infrastructure\Data\" />
+    <Folder Include="Infrastructure\Repositories\" />
+    <Folder Include="UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
