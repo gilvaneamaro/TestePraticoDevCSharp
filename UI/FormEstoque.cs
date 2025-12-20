@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TestePraticoDevCSharp
+namespace TestePraticoDevCSharp.UI
 {
-    public partial class Form1 : Form
+    public partial class FormEstoque : Form
     {
-        public Form1()
+        public FormEstoque()
         {
             InitializeComponent();
         }
