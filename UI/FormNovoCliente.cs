@@ -22,6 +22,8 @@ namespace TestePraticoDevCSharp.UI
 
         private void btnCadastrarCliente_Click(object sender, EventArgs e)
         {
+
+
             _navigator.Load(new FormVenda());
         }
     }

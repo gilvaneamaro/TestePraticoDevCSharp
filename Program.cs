@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TestePraticoDevCSharp.App.Interfaces;
+using TestePraticoDevCSharp.App.Services;
+using TestePraticoDevCSharp.Domain.Repositories;
+using TestePraticoDevCSharp.Infrastructure.Data;
+using TestePraticoDevCSharp.UI;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TestePraticoDevCSharp
 {
@@ -16,7 +22,30 @@ namespace TestePraticoDevCSharp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+
+            var services = new ServiceCollection();
+
+            // ---------- Infra ----------
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+
+            // ---------- Application ----------
+            services.AddScoped<ClienteService>();
+            services.AddScoped<ProdutoService>();
+
+            // ---------- UI ----------
+            services.AddTransient<FormVenda>();
+            services.AddTransient<FormCliente>();
+            services.AddTransient<FormDefineCliente>();
+            services.AddTransient<FormEstoque>();
+            services.AddTransient<FormNovoCliente>();
+            services.AddTransient<FormRelatorio>();
+            services.AddTransient<Main>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            Application.Run(serviceProvider.GetRequiredService<Main>());
+
         }
     }
 }
