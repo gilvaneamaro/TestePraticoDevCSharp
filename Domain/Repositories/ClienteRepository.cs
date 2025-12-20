@@ -14,18 +14,18 @@ namespace TestePraticoDevCSharp.Domain.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {
-        private readonly UnitOfWork _uow;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ClienteRepository(UnitOfWork uow)
+        public ClienteRepository(IUnitOfWork unitOfWork)
         {
-            _uow = uow;
+            _unitOfWork = unitOfWork;
         }
 
         public void Add(Cliente cliente)
         {
-            using (var cmd = _uow.Connection.CreateCommand())
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
-                cmd.Transaction = _uow.Transaction;
+                cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
                 INSERT INTO clientes (nome, email, telefone)
                 VALUES (@nome, @email, @telefone)
@@ -45,9 +45,9 @@ namespace TestePraticoDevCSharp.Domain.Repositories
 
         public void Update(Cliente cliente)
         {
-            using (var cmd = _uow.Connection.CreateCommand())
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
-                cmd.Transaction = _uow.Transaction;
+                cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
                 UPDATE clientes
                 SET nome = @nome,
@@ -66,9 +66,9 @@ namespace TestePraticoDevCSharp.Domain.Repositories
 
         public Cliente GetByEmail(string email)
         {
-            using (var cmd = _uow.Connection.CreateCommand())
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
-                cmd.Transaction = _uow.Transaction;
+                cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
                 SELECT id, nome, email, telefone
                 FROM clientes
@@ -87,9 +87,9 @@ namespace TestePraticoDevCSharp.Domain.Repositories
         }
         public Cliente GetById(int id)
         {
-            using (var cmd = _uow.Connection.CreateCommand())
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
-                cmd.Transaction = _uow.Transaction;
+                cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
             SELECT id, nome, email, telefone
             FROM clientes

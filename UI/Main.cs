@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,23 +10,28 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestePraticoDevCSharp.UI;
 using TestePraticoDevCSharp.UI.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TestePraticoDevCSharp
 {
     public partial class Main : Form
     {
-        private Form _currentForm;
+        private readonly IServiceProvider _serviceProvider;
         private FormNavigator _navigator;
 
-        public Main()
+        public Main(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            _navigator = new FormNavigator(pnlMain);
+            _serviceProvider = serviceProvider;
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
+            // Agora o construtor bate certinho
+            _navigator = new FormNavigator(pnlMain, _serviceProvider);
 
+            // Form inicial (opcional)
+            _navigator.Navigate<FormVenda>();
         }
 
         private void vendaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -45,22 +51,22 @@ namespace TestePraticoDevCSharp
 
         private void btnClientes_Click(object sender, EventArgs e)
         {
-            _navigator.Load(new FormCliente());
+            _navigator.Navigate<FormCliente>();
         }
 
         private void btnEstoque_Click(object sender, EventArgs e)
         {
-            _navigator.Load(new FormEstoque());
+            _navigator.Navigate<FormEstoque>();
         }
 
         private void btnRelatorio_Click(object sender, EventArgs e)
         {
-            _navigator.Load(new FormRelatorio());
+            _navigator.Navigate<FormRelatorio>();
         }
 
         private void btnVenda_Click(object sender, EventArgs e)
         {
-            _navigator.Load(new FormDefineCliente(_navigator));
+            _navigator.Navigate<FormDefineCliente>();
         }
     }
 }

@@ -102,6 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\Interfaces\IClienteRepository.cs" />
+    <Compile Include="App\Interfaces\IFormNavigator.cs" />
+    <Compile Include="App\Interfaces\INavigable.cs" />
     <Compile Include="App\Interfaces\IUnitOfWork.cs" />
     <Compile Include="App\Services\ClienteService.cs" />
     <Compile Include="App\Services\ProdutoService.cs" />

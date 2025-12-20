@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using TestePraticoDevCSharp.App.Services;
 using TestePraticoDevCSharp.Domain.Repositories;
 using TestePraticoDevCSharp.Infrastructure.Data;
 using TestePraticoDevCSharp.UI;
-using Microsoft.Extensions.DependencyInjection;
+using TestePraticoDevCSharp.UI.Navigation;
 
 namespace TestePraticoDevCSharp
 {
@@ -33,6 +34,7 @@ namespace TestePraticoDevCSharp
             // ---------- Application ----------
             services.AddScoped<ClienteService>();
             services.AddScoped<ProdutoService>();
+            services.AddSingleton<FormNavigator>();
 
             // ---------- UI ----------
             services.AddTransient<FormVenda>();
@@ -43,9 +45,12 @@ namespace TestePraticoDevCSharp
             services.AddTransient<FormRelatorio>();
             services.AddTransient<Main>();
 
+            services.AddSingleton<IDbConnectionFactory>(
+                _ => new DbConnectionFactory());
+
             var serviceProvider = services.BuildServiceProvider();
             Application.Run(serviceProvider.GetRequiredService<Main>());
-
+            
         }
     }
 }

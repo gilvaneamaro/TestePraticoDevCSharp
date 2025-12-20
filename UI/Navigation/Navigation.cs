@@ -1,29 +1,36 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TestePraticoDevCSharp.App.Interfaces;
 
 namespace TestePraticoDevCSharp.UI.Navigation
 {
-    public class FormNavigator
+    public class FormNavigator : IFormNavigator
     {
         private Form _currentForm;
         private readonly Panel _container;
+        private readonly IServiceProvider _serviceProvider;
 
-        public FormNavigator(Panel container)
+        public FormNavigator(Panel container, IServiceProvider serviceProvider)
         {
             _container = container;
+            _serviceProvider = serviceProvider;
         }
 
-        public void Load(Form form)
+        public void Navigate<TForm>() where TForm : Form
         {
-            if (_currentForm != null)
-            {
-                _currentForm.Close();
-                _currentForm.Dispose();
-            }
+            _currentForm?.Close();
+            _currentForm?.Dispose();
+
+            var form = _serviceProvider.GetRequiredService<TForm>();
+
+            if (form is INavigable navigable)
+                navigable.SetNavigator(this);
 
             _currentForm = form;
 
