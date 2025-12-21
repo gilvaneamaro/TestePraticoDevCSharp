@@ -22,15 +22,15 @@ namespace TestePraticoDevCSharp.App.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Cadastrar(string nome, string email, string telefone)
+        public async Task CadastrarAsync(string nome, string email, string telefone)
         {
-            _unitOfWork.BeginTransaction();
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
                 var emailVO = new Email(email);
 
-                if (_clienteRepository.GetByEmail(emailVO.Endereco) != null)
+                if (await _clienteRepository.ExistsByEmailAsync(emailVO.Endereco))
                     throw new InvalidOperationException("E-mail já cadastrado.");
 
                 var cliente = new Cliente(
@@ -38,75 +38,78 @@ namespace TestePraticoDevCSharp.App.Services
                     nome,
                     emailVO,
                     telefone
-                    );
+                );
 
                 await _clienteRepository.Add(cliente);
 
-                _unitOfWork.Commit();
+                await _unitOfWork.Commit();
             }
             catch
             {
-                _unitOfWork.Rollback();
+                await _unitOfWork.Rollback();
                 throw;
             }
         }
 
-        public void Atualizar(int id, string nome, string email, string telefone)
+
+        public async Task AtualizarAsync(int id, string nome, string email, string telefone)
         {
-            _unitOfWork.BeginTransaction();
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
-                var cliente = _clienteRepository.GetById(id);
+                var cliente = await _clienteRepository.GetByIdAsync(id);
 
                 if (cliente == null)
                     throw new InvalidOperationException("Cliente não encontrado.");
 
                 var emailVO = new Email(email);
 
-                var existente = _clienteRepository.GetByEmail(emailVO.Endereco);
-                foreach ( Cliente c in existente )
-                {
-                    if (c.Id != id)
-                        throw new InvalidOperationException("E-mail já está em uso.");
-                }
+                if (await _clienteRepository.ExistsByEmailAsync(emailVO.Endereco, id))
+                    throw new InvalidOperationException("E-mail já está em uso.");
 
                 var atualizado = new Cliente(
                     cliente.Id,
                     nome,
                     emailVO,
-                    telefone);
+                    telefone
+                );
 
-                _clienteRepository.Update(atualizado);
+                await _clienteRepository.UpdateAsync(atualizado);
 
-                _unitOfWork.Commit();
+                await _unitOfWork.Commit();
             }
             catch
             {
-                _unitOfWork.Rollback();
+                await _unitOfWork.Rollback();
                 throw;
             }
         }
 
-        public List<Cliente> BuscarPorNome(string nome)
+        public async Task<List<Cliente>> BuscarPorNomeAsync(string nome)
         {
-            return _clienteRepository.GetByName(nome);
+            return await _clienteRepository.GetByNameAsync(nome);
         }
 
-        public List<Cliente> GetByEmail(string email)
+        public async Task<List<Cliente>> GetByEmailAsync(string email)
         {
-            return _clienteRepository.GetByEmail(email);
+            return await _clienteRepository.GetByEmailAsync(email);
         }
-        
-        public void Deletar(int id)
+
+
+        public async Task DeletarAsync(int id)
         {
-            _unitOfWork.BeginTransaction();
+            await _unitOfWork.BeginTransactionAsync();
+
             try
             {
-                var cliente = _clienteRepository.GetById(id);
+                var cliente = await _clienteRepository.GetByIdAsync(id);
+
                 if (cliente == null)
                     throw new InvalidOperationException("Cliente não encontrado.");
-                _clienteRepository.Delete(id);
+
+                await _clienteRepository.DeleteAsync(id);
+
                 _unitOfWork.Commit();
             }
             catch
@@ -115,6 +118,5 @@ namespace TestePraticoDevCSharp.App.Services
                 throw;
             }
         }
-
     }
 }

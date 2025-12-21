@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,29 +11,30 @@ namespace TestePraticoDevCSharp.Infrastructure.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly DbConnection _connection;
 
-        public IDbConnection Connection { get; }
-        public IDbTransaction Transaction { get; private set; }
+        public DbConnection Connection => _connection;
+        public DbTransaction Transaction { get; private set; }
 
         public UnitOfWork(IDbConnectionFactory connectionFactory)
         {
-            _connectionFactory = connectionFactory;
-            Connection = _connectionFactory.Create();
-            Connection.Open();
+            _connection = connectionFactory.Create();
         }
 
-        public void BeginTransaction()
+        public async Task BeginTransactionAsync()
         {
-            Transaction = Connection.BeginTransaction();
+            if (_connection.State != ConnectionState.Open)
+                await _connection.OpenAsync();
+
+            Transaction = _connection.BeginTransaction();
         }
 
-        public void Commit()
+        public async Task Commit()
         {
             Transaction?.Commit();
         }
 
-        public void Rollback()
+        public async Task Rollback()
         {
             Transaction?.Rollback();
         }

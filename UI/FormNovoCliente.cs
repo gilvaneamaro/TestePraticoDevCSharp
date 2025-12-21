@@ -34,7 +34,7 @@ namespace TestePraticoDevCSharp.UI
             {
                 btnCadastrarCliente.Enabled = false;
 
-                await _clienteService.Cadastrar(
+                await _clienteService.CadastrarAsync(
                     txtNome.Text,
                     txtEmail.Text,
                     txtTelefone.Text

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Npgsql;
-using System.Configuration;
 
 
 namespace TestePraticoDevCSharp.Infrastructure.Data
@@ -22,7 +23,7 @@ namespace TestePraticoDevCSharp.Infrastructure.Data
                     .ConnectionString;
         }
 
-        public IDbConnection Create()
+        public DbConnection Create()
         {
             return new NpgsqlConnection(_connectionString);
         }

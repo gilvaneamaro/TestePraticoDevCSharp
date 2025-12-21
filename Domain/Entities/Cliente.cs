@@ -15,7 +15,38 @@ namespace TestePraticoDevCSharp.Domain.Entities
         public string Telefone { get; private set; }
 
         public bool Ativo { get; private set; }
+        public string EmailEndereco
+        {
+            get => Email.Endereco;
+            set => AlterarEmail(value);
+        }
 
+        public void AlterarNome(string nome)
+        {
+            Nome = nome;
+        }
+
+        public void AlterarTelefone(string telefone)
+        {
+            Telefone = telefone;
+        }
+
+        public void AlterarEmail(string email)
+        {
+            Email = new Email(email);
+        }
+
+        public string NomeEdicao
+        {
+            get => Nome;
+            set => AlterarNome(value);
+        }
+
+        public string TelefoneEdicao
+        {
+            get => Telefone;
+            set => AlterarTelefone(value);
+        }
 
         public Cliente(int id, string nome, Email email, string telefone, bool ativo)
         {

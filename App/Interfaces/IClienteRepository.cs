@@ -10,10 +10,17 @@ namespace TestePraticoDevCSharp.App.Interfaces
     public interface IClienteRepository
     {
         Task Add(Cliente cliente);
-        void Update(Cliente cliente);
-        List<Cliente> GetByEmail(string email);
-        Cliente GetById(int id);
-        List<Cliente> GetByName(string nome);
-        void Delete(int id);
+
+        Task UpdateAsync(Cliente cliente);
+
+        Task<Cliente> GetByIdAsync(int id);
+
+        Task<List<Cliente>> GetByEmailAsync(string email);
+
+        Task<List<Cliente>> GetByNameAsync(string nome);
+
+        Task<bool> ExistsByEmailAsync(string email, int? ignoreId = null);
+
+        Task DeleteAsync(int id);
     }
 }
