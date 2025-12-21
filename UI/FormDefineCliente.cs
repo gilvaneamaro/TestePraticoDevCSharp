@@ -30,5 +30,10 @@ namespace TestePraticoDevCSharp.UI
         {
             _navigator.Navigate<FormNovoCliente>();
         }
+
+        private void btnBuscarCadastro_Click(object sender, EventArgs e)
+        {
+            _navigator.Navigate<FormBuscaCliente>();
+        }
     }
 }

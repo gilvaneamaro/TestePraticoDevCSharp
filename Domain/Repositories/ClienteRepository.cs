@@ -21,22 +21,21 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        public void Add(Cliente cliente)
+        public async Task Add(Cliente cliente)
         {
             using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
                 cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
-                INSERT INTO clientes (nome, email, telefone)
-                VALUES (@nome, @email, @telefone)
-                RETURNING id;";
+                    INSERT INTO clientes (nome, email, telefone)
+                    VALUES (@nome, @email, @telefone)
+                    RETURNING id;";
 
                 cmd.Parameters.Add(new NpgsqlParameter("@nome", cliente.Nome));
                 cmd.Parameters.Add(new NpgsqlParameter("@email", cliente.Email.Endereco));
                 cmd.Parameters.Add(new NpgsqlParameter("@telefone", cliente.Telefone));
 
                 var id = Convert.ToInt32(cmd.ExecuteScalar());
-
                 typeof(Cliente)
                     .GetProperty("Id")
                     .SetValue(cliente, id);
@@ -49,11 +48,11 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             {
                 cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
-                UPDATE clientes
-                SET nome = @nome,
-                    email = @email,
-                    telefone = @telefone
-                WHERE id = @id";
+                    UPDATE clientes
+                    SET nome = @nome,
+                        email = @email,
+                        telefone = @telefone
+                    WHERE id = @id";
 
                 cmd.Parameters.Add(new NpgsqlParameter("@nome", cliente.Nome));
                 cmd.Parameters.Add(new NpgsqlParameter("@email", cliente.Email.Endereco));
@@ -64,26 +63,29 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             }
         }
 
-        public Cliente GetByEmail(string email)
+        public List<Cliente> GetByEmail(string email)
         {
+            var clientes = new List<Cliente>();
+
             using (var cmd = _unitOfWork.Connection.CreateCommand())
             {
                 cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
-                SELECT id, nome, email, telefone
-                FROM clientes
-                WHERE email = @email";
+                    SELECT id, nome, email, telefone
+                    FROM clientes
+                    WHERE email ILIKE @email";
 
-                cmd.Parameters.Add(new NpgsqlParameter("@email", email));
+                cmd.Parameters.Add(new NpgsqlParameter("@email", $"%{email}%"));
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    if (!reader.Read())
-                        return null;
-
-                    return Map(reader);
+                    while (reader.Read())
+                    {
+                        clientes.Add(Map(reader));
+                    }
                 }
             }
+            return clientes;
         }
         public Cliente GetById(int id)
         {
@@ -91,9 +93,9 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             {
                 cmd.Transaction = _unitOfWork.Transaction;
                 cmd.CommandText = @"
-            SELECT id, nome, email, telefone
-            FROM clientes
-            WHERE id = @id";
+                    SELECT id, nome, email, telefone
+                    FROM clientes
+                    WHERE id = @id";
 
                 cmd.Parameters.Add(new NpgsqlParameter("@id", id));
 
@@ -104,6 +106,48 @@ namespace TestePraticoDevCSharp.Domain.Repositories
 
                     return Map(reader);
                 }
+            }
+        }
+
+        public List<Cliente> GetByName(string nome)
+        {
+            var clientes = new List<Cliente>();
+
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
+            {
+                cmd.Transaction = _unitOfWork.Transaction;
+                cmd.CommandText = @"
+                    SELECT id, nome, email, telefone
+                    FROM clientes
+                    WHERE nome ILIKE @nome
+                    ORDER BY nome";
+
+                cmd.Parameters.Add(
+                    new NpgsqlParameter("@nome", $"%{nome}%")
+                );
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        clientes.Add(Map(reader));
+                    }
+                }
+            }
+            return clientes;
+        }
+
+        public void Delete(int id)
+        {
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
+            {
+                cmd.Transaction = _unitOfWork.Transaction;
+                cmd.CommandText = @"
+                    UPDATE clientes
+                    SET ativo = FALSE                   
+                    WHERE id = @id";
+                cmd.Parameters.Add(new NpgsqlParameter("@id", id));
+                cmd.ExecuteNonQuery();
             }
         }
 

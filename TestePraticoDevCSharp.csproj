@@ -113,6 +113,18 @@
     <Compile Include="Domain\Entities\Venda.cs" />
     <Compile Include="Domain\Repositories\ClienteRepository.cs" />
     <Compile Include="Domain\ValueObjects\Email.cs" />
+    <Compile Include="UI\FormBuscaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormBuscaCliente.Designer.cs">
+      <DependentUpon>FormBuscaCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormCaixa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormCaixa.Designer.cs">
+      <DependentUpon>FormCaixa.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FormNovoCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,12 +136,6 @@
     </Compile>
     <Compile Include="UI\FormVenda.Designer.cs">
       <DependentUpon>FormVenda.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\FormCliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\FormCliente.Designer.cs">
-      <DependentUpon>FormCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\FormEstoque.cs">
       <SubType>Form</SubType>
@@ -170,14 +176,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\FormBuscaCliente.resx">
+      <DependentUpon>FormBuscaCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormCaixa.resx">
+      <DependentUpon>FormCaixa.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormNovoCliente.resx">
       <DependentUpon>FormNovoCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormVenda.resx">
       <DependentUpon>FormVenda.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormCliente.resx">
-      <DependentUpon>FormCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormEstoque.resx">
       <DependentUpon>FormEstoque.cs</DependentUpon>
@@ -193,6 +202,7 @@
     </EmbeddedResource>
     <None Include="docker-compose.yml" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\TestePraticoDevCSharp.Domain.Entities.Cliente.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -212,6 +222,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="docker\postgres\01-create-database.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('packages\Microsoft.Extensions.Logging.Abstractions.6.0.0\build\Microsoft.Extensions.Logging.Abstractions.targets')" />

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestePraticoDevCSharp.UI;
 using TestePraticoDevCSharp.UI.Navigation;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace TestePraticoDevCSharp
 {
@@ -27,11 +26,8 @@ namespace TestePraticoDevCSharp
 
         private void Main_Load(object sender, EventArgs e)
         {
-            // Agora o construtor bate certinho
             _navigator = new FormNavigator(pnlMain, _serviceProvider);
-
-            // Form inicial (opcional)
-            _navigator.Navigate<FormVenda>();
+            _navigator.Navigate<FormCaixa>();
         }
 
         private void vendaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -46,13 +42,9 @@ namespace TestePraticoDevCSharp
 
         private void bntCaixa_Click(object sender, EventArgs e)
         {
-            
+            _navigator.Navigate<FormCaixa>();
         }
 
-        private void btnClientes_Click(object sender, EventArgs e)
-        {
-            _navigator.Navigate<FormCliente>();
-        }
 
         private void btnEstoque_Click(object sender, EventArgs e)
         {

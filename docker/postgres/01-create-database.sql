@@ -2,7 +2,8 @@ CREATE TABLE clientes (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
-    telefone VARCHAR(20)
+    telefone VARCHAR(20),
+    status INTEGER NOT NULL DEFAULT 1
 );
 
 CREATE TABLE produtos (

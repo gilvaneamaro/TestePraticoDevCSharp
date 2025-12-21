@@ -7,17 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TestePraticoDevCSharp.App.Interfaces;
+using TestePraticoDevCSharp.App.Services;
+using TestePraticoDevCSharp.Domain.Entities;
 
 namespace TestePraticoDevCSharp.UI
 {
-    public partial class FormVenda : Form
+    public partial class FormVenda : Form, INavigable
     {
-        public FormVenda()
+        private Cliente _clienteSelecionado;
+        private IFormNavigator _navigator;
+        private readonly ClienteService _clienteService;
+        public FormVenda(ClienteService clienteService)
         {
             InitializeComponent();
+            _clienteService = clienteService;
+        }
+        public void SetNavigator(IFormNavigator navigator)
+        {
+            _navigator = navigator;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnAdicionarProduto_Click(object sender, EventArgs e)
         {
 
         }

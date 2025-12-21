@@ -28,11 +28,13 @@ namespace TestePraticoDevCSharp.UI
             _navigator = navigator;
         }
 
-        private void btnCadastrarCliente_Click(object sender, EventArgs e)
+        private async void btnCadastrarCliente_Click(object sender, EventArgs e)
         {
             try
             {
-                _clienteService.Cadastrar(
+                btnCadastrarCliente.Enabled = false;
+
+                await _clienteService.Cadastrar(
                     txtNome.Text,
                     txtEmail.Text,
                     txtTelefone.Text
@@ -44,7 +46,6 @@ namespace TestePraticoDevCSharp.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Navegação SEM new
                 _navigator.Navigate<FormVenda>();
             }
             catch (Exception ex)
@@ -54,6 +55,10 @@ namespace TestePraticoDevCSharp.UI
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnCadastrarCliente.Enabled = true;
             }
         }
     }

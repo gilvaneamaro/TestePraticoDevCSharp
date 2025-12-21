@@ -23,5 +23,11 @@ namespace TestePraticoDevCSharp.Domain.ValueObjects
 
         public override int GetHashCode()
             => Endereco.GetHashCode();
+
+        public override string ToString()
+        {
+            return Endereco;
+        }
     }
+
 }

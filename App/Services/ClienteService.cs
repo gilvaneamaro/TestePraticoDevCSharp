@@ -22,7 +22,7 @@ namespace TestePraticoDevCSharp.App.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void Cadastrar(string nome, string email, string telefone)
+        public async Task Cadastrar(string nome, string email, string telefone)
         {
             _unitOfWork.BeginTransaction();
 
@@ -37,9 +37,10 @@ namespace TestePraticoDevCSharp.App.Services
                     0,
                     nome,
                     emailVO,
-                    telefone);
+                    telefone
+                    );
 
-                _clienteRepository.Add(cliente);
+                await _clienteRepository.Add(cliente);
 
                 _unitOfWork.Commit();
             }
@@ -64,9 +65,11 @@ namespace TestePraticoDevCSharp.App.Services
                 var emailVO = new Email(email);
 
                 var existente = _clienteRepository.GetByEmail(emailVO.Endereco);
-
-                if (existente != null && existente.Id != id)
-                    throw new InvalidOperationException("E-mail já está em uso.");
+                foreach ( Cliente c in existente )
+                {
+                    if (c.Id != id)
+                        throw new InvalidOperationException("E-mail já está em uso.");
+                }
 
                 var atualizado = new Cliente(
                     cliente.Id,
@@ -85,9 +88,32 @@ namespace TestePraticoDevCSharp.App.Services
             }
         }
 
-        public Cliente ObterPorId(int id)
+        public List<Cliente> BuscarPorNome(string nome)
         {
-            return _clienteRepository.GetById(id);
+            return _clienteRepository.GetByName(nome);
+        }
+
+        public List<Cliente> GetByEmail(string email)
+        {
+            return _clienteRepository.GetByEmail(email);
+        }
+        
+        public void Deletar(int id)
+        {
+            _unitOfWork.BeginTransaction();
+            try
+            {
+                var cliente = _clienteRepository.GetById(id);
+                if (cliente == null)
+                    throw new InvalidOperationException("Cliente não encontrado.");
+                _clienteRepository.Delete(id);
+                _unitOfWork.Commit();
+            }
+            catch
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
         }
 
     }

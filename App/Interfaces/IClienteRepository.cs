@@ -9,9 +9,11 @@ namespace TestePraticoDevCSharp.App.Interfaces
 {
     public interface IClienteRepository
     {
-        void Add(Cliente cliente);
+        Task Add(Cliente cliente);
         void Update(Cliente cliente);
-        Cliente GetByEmail(string email);
+        List<Cliente> GetByEmail(string email);
         Cliente GetById(int id);
+        List<Cliente> GetByName(string nome);
+        void Delete(int id);
     }
 }

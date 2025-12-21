@@ -37,13 +37,15 @@ namespace TestePraticoDevCSharp
             services.AddSingleton<FormNavigator>();
 
             // ---------- UI ----------
+            services.AddTransient<Main>();
+            services.AddTransient<FormCaixa>();
             services.AddTransient<FormVenda>();
-            services.AddTransient<FormCliente>();
             services.AddTransient<FormDefineCliente>();
             services.AddTransient<FormEstoque>();
             services.AddTransient<FormNovoCliente>();
             services.AddTransient<FormRelatorio>();
-            services.AddTransient<Main>();
+            services.AddTransient<FormCaixa>();
+            services.AddTransient<FormBuscaCliente>();
 
             services.AddSingleton<IDbConnectionFactory>(
                 _ => new DbConnectionFactory());
