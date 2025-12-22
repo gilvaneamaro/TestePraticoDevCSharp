@@ -34,27 +34,28 @@ namespace TestePraticoDevCSharp.UI
 
         private async void btnSalvarProduto_Click(object sender, EventArgs e)
         {
-            try 
-            { 
-                produto = await _produtoService.AdicionarProduto(
-                    txtNomeProduto.Text,
-                    txtDescricaoProduto.Text,
-                    decimal.Parse(txtValorUnitario.Text),
-                    int.Parse(nupEstoque.Text)
-                );
+            try
+            {
+                if (_produtoSelecionado == null)
+                {
+                    await _produtoService.AdicionarProduto(
+                        txtNomeProduto.Text,
+                        txtDescricaoProduto.Text,
+                        decimal.Parse(txtValorUnitario.Text),
+                        (int)nupEstoque.Value
+                    );
+                }
+                else
+                {
+                    AtualizarProdutoSelecionado();
+                    await _produtoService.AtualizarProduto(_produtoSelecionado);
+                }
 
-                txtNomeProduto.Text = "";
-                txtDescricaoProduto.Text = "";
-                txtValorUnitario.Text = "";
-                nupEstoque.Text = "";
-
-
-                var produtosAtualizados = await _produtoService.ObterTodos();
-                bsListaEstoque.DataSource = produtosAtualizados;
-                bsListaEstoque.ResetBindings(false);
+                LimparFormulario();
+                await RecarregarGrid();
 
                 MessageBox.Show(
-                    "Produto cadastrado com sucesso!",
+                    "Operação realizada com sucesso!",
                     "Sucesso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -67,11 +68,28 @@ namespace TestePraticoDevCSharp.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-
         }
+
         private void btnEditar_Click(object sender, EventArgs e)
         {
+            if (bsListaEstoque.Current == null)
+            {
+                MessageBox.Show(
+                    "Selecione um produto para editar.",
+                    "Atenção",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
+            _produtoSelecionado = (Produto)bsListaEstoque.Current;
+
+            txtNomeProduto.Text = _produtoSelecionado.Nome;
+            txtDescricaoProduto.Text = _produtoSelecionado.Descricao;
+            txtValorUnitario.Text = _produtoSelecionado.Preco
+                .ToString("N2", new CultureInfo("pt-BR"));
+
+            nupEstoque.Value = _produtoSelecionado.Estoque;
         }
 
         private async void btnDeletar_Click(object sender, EventArgs e)
@@ -115,6 +133,38 @@ namespace TestePraticoDevCSharp.UI
             {
                 txtValorUnitario.Text = "0,00";
             }
+        }
+
+        private void AtualizarProdutoSelecionado()
+        {
+            decimal novoPreco = decimal.Parse(txtValorUnitario.Text);
+            int novoEstoque = (int)nupEstoque.Value;
+
+            if (_produtoSelecionado.Preco != novoPreco)
+                _produtoSelecionado.AtualizarPreco(novoPreco);
+
+            int diferenca = novoEstoque - _produtoSelecionado.Estoque;
+
+            if (diferenca > 0)
+                _produtoSelecionado.AdicionarEstoque(diferenca);
+            else if (diferenca < 0)
+                _produtoSelecionado.RemoverEstoque(Math.Abs(diferenca));
+        }
+
+        private void LimparFormulario()
+        {
+            txtNomeProduto.Text = "";
+            txtDescricaoProduto.Text = "";
+            txtValorUnitario.Text = "";
+            nupEstoque.Value = 0;
+
+            _produtoSelecionado = null;
+        }
+        private async Task RecarregarGrid()
+        {
+            var produtos = await _produtoService.ObterTodos();
+            bsListaEstoque.DataSource = produtos;
+            bsListaEstoque.ResetBindings(false);
         }
     }
 }

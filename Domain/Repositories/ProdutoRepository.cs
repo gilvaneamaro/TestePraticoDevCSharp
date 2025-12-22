@@ -43,11 +43,6 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             }
         }
 
-        public async Task AtualizarAsync(Produto produto)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Produto> ObterPorIdAsync(int id)
         {
             using (DbCommand cmd = _unitOfWork.Connection.CreateCommand())
@@ -143,13 +138,41 @@ namespace TestePraticoDevCSharp.Domain.Repositories
             }
         }
 
+        public async Task AtualizarAsync(Produto produto)
+        {
+            using (DbCommand cmd = _unitOfWork.Connection.CreateCommand())
+            {
+                cmd.Transaction = _unitOfWork.Transaction;
+                cmd.CommandText = @"
+        UPDATE produtos
+        SET 
+            nome = @nome,
+            descricao = @descricao,
+            preco = @preco,
+            estoque = @estoque
+        WHERE id = @id
+          AND ativo = TRUE;";
+
+                cmd.Parameters.Add(new NpgsqlParameter("@id", produto.Id));
+                cmd.Parameters.Add(new NpgsqlParameter("@nome", produto.Nome));
+                cmd.Parameters.Add(new NpgsqlParameter("@descricao", produto.Descricao));
+                cmd.Parameters.Add(new NpgsqlParameter("@preco", produto.Preco));
+                cmd.Parameters.Add(new NpgsqlParameter("@estoque", produto.Estoque));
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+
+                if (rows == 0)
+                    throw new InvalidOperationException("Produto não encontrado ou inativo.");
+            }
+        }
+
         private Produto Map(IDataReader reader)
         {
             return new Produto(
                 reader.GetInt32(0),     
                 reader.GetString(1),   
                 reader.GetString(2),   
-                reader.GetInt32(3),  
+                reader.GetDecimal(3),  
                 reader.GetInt32(4) 
             );
         }

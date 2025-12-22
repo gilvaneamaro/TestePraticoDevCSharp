@@ -19,36 +19,30 @@ namespace TestePraticoDevCSharp.App.Services
             _produtoRepository = produtoRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Produto> AdicionarProduto(string nome,string descricao, decimal preco, int estoque)
+        public async Task<Produto> AdicionarProduto(
+     string nome,
+     string descricao,
+     decimal preco,
+     int estoque)
         {
             await _unitOfWork.BeginTransactionAsync();
-            if (string.IsNullOrWhiteSpace(nome))
-                throw new ArgumentException("Nome do produto é obrigatório.");
-            if (preco <= 0)
-                throw new ArgumentException("Preço deve ser maior que zero.");
-            if (estoque < 0)
-                throw new ArgumentException("Estoque não pode ser negativo.");
 
             try
-            { 
-                var produto = new Produto(
-                    nome,
-                    preco,
-                    descricao,
-                    estoque
-                );
+            {
+                var produto = new Produto(nome, preco, descricao, estoque);
+
                 await _produtoRepository.Adicionar(produto);
                 await _unitOfWork.Commit();
 
                 return produto;
-            } 
-
+            }
             catch
             {
                 await _unitOfWork.Rollback();
                 throw;
             }
         }
+   
 
         public async Task<List<Produto>> ObterTodos()
         {
@@ -73,6 +67,24 @@ namespace TestePraticoDevCSharp.App.Services
                 await _unitOfWork.Commit();
             
         }
+        public async Task AtualizarProduto(Produto produto)
+        {
+            await _unitOfWork.BeginTransactionAsync();
 
+            try
+            {
+                var existente = await _produtoRepository.ObterPorIdAsync(produto.Id);
+                if (existente == null)
+                    throw new ArgumentException("Produto não encontrado.");
+
+                await _produtoRepository.AtualizarAsync(produto);
+                await _unitOfWork.Commit();
+            }
+            catch
+            {
+                await _unitOfWork.Rollback();
+                throw;
+            }
+        }
     }
 }
