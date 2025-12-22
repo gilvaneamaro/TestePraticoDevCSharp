@@ -17,9 +17,21 @@ CREATE TABLE produtos (
 
 CREATE TABLE vendas (
     id SERIAL PRIMARY KEY,
+
     cliente_id INT NOT NULL,
+
     data_venda TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+
+    metodo_pagamento INTEGER NOT NULL,
+
+    valor_total NUMERIC(10,2) NOT NULL CHECK (valor_total >= 0),
+
+    CONSTRAINT fk_vendas_cliente
+        FOREIGN KEY (cliente_id)
+        REFERENCES clientes(id),
+
+    CONSTRAINT chk_metodo_pagamento
+        CHECK (metodo_pagamento IN (1, 2, 3, 4, 5))
 );
 
 CREATE TABLE venda_itens (
@@ -31,3 +43,16 @@ CREATE TABLE venda_itens (
     FOREIGN KEY (venda_id) REFERENCES vendas(id),
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
+
+
+CREATE INDEX idx_vendas_cliente
+ON vendas (cliente_id);
+
+CREATE INDEX idx_vendas_data
+ON vendas (data_venda);
+
+CREATE INDEX idx_venda_itens_venda
+ON venda_itens (venda_id);
+
+CREATE INDEX idx_venda_itens_produto
+ON venda_itens (produto_id);

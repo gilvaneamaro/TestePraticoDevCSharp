@@ -19,6 +19,8 @@ namespace TestePraticoDevCSharp.App.Interfaces
 
         Task AdicionaEstoque(int produtoId, int quantidade);
 
+        Task BaixarEstoque(int produtoId, int quantidade);
+
         Task RemoverAsync(int id);
         Task<List<Produto>> ListarTodosAsync();
     }

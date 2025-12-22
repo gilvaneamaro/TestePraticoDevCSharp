@@ -108,7 +108,7 @@ namespace TestePraticoDevCSharp.Domain.Repositories
                 cmd.CommandText = @"
                 SELECT id, nome, descricao, preco, estoque
                 FROM produtos
-                WHERE ativo=true";
+                WHERE ativo=true;";
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
@@ -121,6 +121,28 @@ namespace TestePraticoDevCSharp.Domain.Repositories
 
             return produtos;
         }
+
+        public async Task BaixarEstoque(int produtoId, int quantidade)
+        {
+            using (var cmd = _unitOfWork.Connection.CreateCommand())
+            {
+                cmd.Transaction = _unitOfWork.Transaction;
+                cmd.CommandText = @"
+                UPDATE produtos
+                SET estoque = estoque - @quantidade
+                WHERE id = @produtoId
+                AND estoque >= @quantidade;";
+
+                cmd.Parameters.Add(new NpgsqlParameter("@produtoId", produtoId));
+                cmd.Parameters.Add(new NpgsqlParameter("@quantidade", quantidade));
+
+                int rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                if (rowsAffected == 0)
+                    throw new InvalidOperationException("Estoque insuficiente.");
+            }
+        }
+
         private Produto Map(IDataReader reader)
         {
             return new Produto(

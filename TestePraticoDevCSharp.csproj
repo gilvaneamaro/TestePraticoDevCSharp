@@ -101,21 +101,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\DTOs\CarrinhoItemDTO.cs" />
     <Compile Include="App\Interfaces\IClienteRepository.cs" />
     <Compile Include="App\Interfaces\IClienteSelecionavel.cs" />
     <Compile Include="App\Interfaces\IFormNavigator.cs" />
+    <Compile Include="App\Interfaces\IItemVendaRepository.cs" />
     <Compile Include="App\Interfaces\INavigable.cs" />
     <Compile Include="App\Interfaces\IProdutoRepository.cs" />
     <Compile Include="App\Interfaces\IUnitOfWork.cs" />
+    <Compile Include="App\Interfaces\IVendaRepository.cs" />
     <Compile Include="App\Services\ClienteService.cs" />
     <Compile Include="App\Services\ProdutoService.cs" />
+    <Compile Include="App\Services\VendaService.cs" />
     <Compile Include="Domain\Entities\Cliente.cs" />
     <Compile Include="Domain\Entities\ItemVenda.cs" />
     <Compile Include="Domain\Entities\Produto.cs" />
     <Compile Include="Domain\Entities\Venda.cs" />
+    <Compile Include="Domain\Enums\MetodoPagamento.cs" />
     <Compile Include="Domain\Repositories\ClienteRepository.cs" />
+    <Compile Include="Domain\Repositories\ItemVendaRepository.cs" />
     <Compile Include="Domain\Repositories\ProdutoRepository.cs" />
+    <Compile Include="Domain\Repositories\VendaRepository.cs" />
     <Compile Include="Domain\ValueObjects\Email.cs" />
     <Compile Include="UI\FormBuscaCliente.cs">
       <SubType>Form</SubType>
@@ -224,6 +229,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App\DTOs\" />
     <Folder Include="App\Reports\" />
   </ItemGroup>
   <ItemGroup>

@@ -31,9 +31,13 @@ namespace TestePraticoDevCSharp
 
             services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IVendaRepository, VendaRepository>();
+            services.AddScoped<IItemVendaRepository, ItemVendaRepository>();
+
             // ---------- Application ----------
             services.AddScoped<ClienteService>();
             services.AddScoped<ProdutoService>();
+            services.AddScoped<VendaService>();
             services.AddSingleton<FormNavigator>();
 
             // ---------- UI ----------

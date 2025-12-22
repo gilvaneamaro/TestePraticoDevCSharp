@@ -32,19 +32,9 @@ namespace TestePraticoDevCSharp.UI
         {
             dgvListaCliente.EditMode = DataGridViewEditMode.EditOnEnter;
 
-            dgvListaCliente.CurrentCellDirtyStateChanged +=
-                dgvListaCliente_CurrentCellDirtyStateChanged;
             cbTipoPesquisa.Text = "Nome";
         }
 
-        private void dgvListaCliente_CurrentCellDirtyStateChanged(object sender, EventArgs e)
-        {
-            if (dgvListaCliente.IsCurrentCellDirty)
-            {
-                dgvListaCliente.CommitEdit(DataGridViewDataErrorContexts.Commit);
-                bsListaCliente.EndEdit();
-            }
-        }
         private async void btnBuscar_Click(object sender, EventArgs e)
         {
 
@@ -134,51 +124,25 @@ namespace TestePraticoDevCSharp.UI
 
         private async void btnSalvar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                dgvListaCliente.EndEdit();
-                bsListaCliente.EndEdit();
+            dgvListaCliente.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            dgvListaCliente.EndEdit();
+            bsListaCliente.EndEdit();
 
-                var cliente = dgvListaCliente.CurrentRow?.DataBoundItem as Cliente;
-                if (cliente == null)
-                    return;
+            var cliente = bsListaCliente.Current as Cliente;
+            if (cliente == null)
+                return;
 
-                await _clienteService.AtualizarAsync(
-                    cliente.Id,
-                    cliente.Nome,
-                    cliente.EmailEndereco,
-                    cliente.Telefone
-                );
+            await _clienteService.AtualizarAsync(
+                cliente.Id,
+                cliente.Nome,
+                cliente.EmailEndereco,
+                cliente.Telefone
+            );
 
-                dgvListaCliente.ReadOnly = true;
+            dgvListaCliente.ReadOnly = true;
+            btnSalvar.Enabled = false;
 
-                btnSalvar.Enabled = false;
-                dgvListaCliente.ReadOnly = true;
-                MessageBox.Show(
-                    "Cliente atualizado com sucesso!",
-                    "Sucesso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Erro ao salvar as alterações.\n" + ex.Message,
-                    "Erro",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
+            MessageBox.Show("Cliente atualizado com sucesso!");
         }
     }
 }

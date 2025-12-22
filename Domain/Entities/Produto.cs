@@ -71,6 +71,9 @@ namespace TestePraticoDevCSharp.Domain.Entities
 
             Estoque -= quantidade;
         }
-
+        public bool PodeVender(int quantidade)
+        {
+            return quantidade > 0 && quantidade <= Estoque;
+        }
     }
 }
