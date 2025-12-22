@@ -27,7 +27,7 @@ namespace TestePraticoDevCSharp
         private void Main_Load(object sender, EventArgs e)
         {
             _navigator = new FormNavigator(pnlMain, _serviceProvider);
-            _navigator.Navigate<FormCaixa>();
+            _navigator.Navigate<FormDefineCliente>();
         }
 
         private void vendaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,12 +40,6 @@ namespace TestePraticoDevCSharp
 
         }
 
-        private void bntCaixa_Click(object sender, EventArgs e)
-        {
-            _navigator.Navigate<FormCaixa>();
-        }
-
-
         private void btnEstoque_Click(object sender, EventArgs e)
         {
             _navigator.Navigate<FormEstoque>();
@@ -53,7 +47,7 @@ namespace TestePraticoDevCSharp
 
         private void btnRelatorio_Click(object sender, EventArgs e)
         {
-            _navigator.Navigate<FormRelatorio>();
+            
         }
 
         private void btnVenda_Click(object sender, EventArgs e)

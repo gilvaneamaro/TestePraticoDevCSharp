@@ -128,12 +128,6 @@
     <Compile Include="UI\FormBuscaCliente.Designer.cs">
       <DependentUpon>FormBuscaCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormCaixa.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\FormCaixa.Designer.cs">
-      <DependentUpon>FormCaixa.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\FormNovoCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,12 +151,6 @@
     </Compile>
     <Compile Include="UI\FormDefineCliente.Designer.cs">
       <DependentUpon>FormDefineCliente.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\FormRelatorio.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\FormRelatorio.Designer.cs">
-      <DependentUpon>FormRelatorio.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Main.cs">
       <SubType>Form</SubType>
@@ -188,9 +176,6 @@
     <EmbeddedResource Include="UI\FormBuscaCliente.resx">
       <DependentUpon>FormBuscaCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormCaixa.resx">
-      <DependentUpon>FormCaixa.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormNovoCliente.resx">
       <DependentUpon>FormNovoCliente.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,9 +187,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormDefineCliente.resx">
       <DependentUpon>FormDefineCliente.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormRelatorio.resx">
-      <DependentUpon>FormRelatorio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

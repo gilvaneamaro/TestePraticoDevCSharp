@@ -147,7 +147,7 @@ namespace TestePraticoDevCSharp.UI
                 _itensVenda.Clear();
                 dgvCarrinho.DataSource = null;
                 txtTotalPedido.Clear();
-                _navigator.Navigate<FormCaixa>();
+                _navigator.Navigate<FormDefineCliente>();
             }
             catch (Exception ex)
             {
@@ -223,7 +223,7 @@ namespace TestePraticoDevCSharp.UI
             );
             if (resultado == DialogResult.No)
                 return;
-            _navigator.Navigate<FormCaixa>();
+            _navigator.Navigate<FormDefineCliente>();
         }
     }
 }
