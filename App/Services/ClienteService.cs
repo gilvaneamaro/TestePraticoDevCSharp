@@ -22,7 +22,7 @@ namespace TestePraticoDevCSharp.App.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CadastrarAsync(string nome, string email, string telefone)
+        public async Task<Cliente> CadastrarAsync(string nome, string email, string telefone)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -34,15 +34,15 @@ namespace TestePraticoDevCSharp.App.Services
                     throw new InvalidOperationException("E-mail já cadastrado.");
 
                 var cliente = new Cliente(
-                    0,
                     nome,
                     emailVO,
                     telefone
                 );
 
                 await _clienteRepository.Add(cliente);
-
                 await _unitOfWork.Commit();
+
+                return cliente;
             }
             catch
             {
@@ -110,11 +110,11 @@ namespace TestePraticoDevCSharp.App.Services
 
                 await _clienteRepository.DeleteAsync(id);
 
-                _unitOfWork.Commit();
+                await _unitOfWork.Commit();
             }
             catch
             {
-                _unitOfWork.Rollback();
+                await _unitOfWork.Rollback();
                 throw;
             }
         }

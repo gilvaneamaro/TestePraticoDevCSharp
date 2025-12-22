@@ -10,7 +10,7 @@ namespace TestePraticoDevCSharp.Domain.Entities
     {
         public int Id { get; private set; }
         public int ProdutoId { get; private set; }
-        public string NomeProduto { get; private set; }
+        public string Produto { get; private set; }
 
         public int Quantidade { get; private set; }
         public decimal PrecoUnitario { get; private set; }
@@ -19,14 +19,14 @@ namespace TestePraticoDevCSharp.Domain.Entities
 
         protected ItemVenda() { }
 
-        public ItemVenda(int produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
+        public ItemVenda(int produtoId, string produto, int quantidade, decimal precoUnitario)
         {
             if (quantidade <= 0)
                 throw new ArgumentException("Quantidade deve ser maior que zero.");
             if (precoUnitario <= 0)
                 throw new ArgumentException("Preço unitário deve ser maior que zero.");
             ProdutoId = produtoId;
-            NomeProduto = nomeProduto;
+            Produto = produto;
             Quantidade = quantidade;
             PrecoUnitario = precoUnitario;
         }

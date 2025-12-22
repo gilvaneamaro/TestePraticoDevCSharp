@@ -11,9 +11,21 @@ namespace TestePraticoDevCSharp.Domain.Entities
         public int Id { get; private set; }
         public string Nome { get; private set; }
         public decimal Preco { get; private set; }
+        public string Descricao { get; private set; }
         public int Estoque { get; private set; }
-    
-        public Produto(string nome, decimal preco, int estoque)
+        public bool Ativo { get; private set; }
+
+        public Produto(int id, string nome, string descricao, decimal preco, int estoque)
+
+        {
+            Id = id;
+            Nome = nome;
+            Preco = preco;
+            Descricao = descricao;
+            Estoque = estoque;
+        }
+
+        public Produto(string nome, decimal preco, string descricao, int estoque)
         {
             if (string.IsNullOrWhiteSpace(nome))
                 throw new ArgumentException("Nome do produto é obrigatório.");
@@ -26,8 +38,11 @@ namespace TestePraticoDevCSharp.Domain.Entities
 
             Nome = nome;
             Preco = preco;
+            Descricao = descricao;
             Estoque = estoque;
         }
+
+
         protected Produto() { }
 
         public void AtualizarPreco(decimal novoPreco)

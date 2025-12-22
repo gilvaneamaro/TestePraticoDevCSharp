@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestePraticoDevCSharp.App.Interfaces;
 using TestePraticoDevCSharp.App.Services;
+using TestePraticoDevCSharp.Domain.Entities;
 using TestePraticoDevCSharp.UI.Navigation;
 
 namespace TestePraticoDevCSharp.UI
@@ -17,6 +18,7 @@ namespace TestePraticoDevCSharp.UI
     {
         private IFormNavigator _navigator;
         private readonly ClienteService _clienteService;
+        private Cliente cliente;
 
         public FormNovoCliente(ClienteService clienteService)
         {
@@ -34,7 +36,7 @@ namespace TestePraticoDevCSharp.UI
             {
                 btnCadastrarCliente.Enabled = false;
 
-                await _clienteService.CadastrarAsync(
+                cliente = await _clienteService.CadastrarAsync(
                     txtNome.Text,
                     txtEmail.Text,
                     txtTelefone.Text
@@ -46,7 +48,11 @@ namespace TestePraticoDevCSharp.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                _navigator.Navigate<FormVenda>();
+                _navigator.Navigate<FormVenda>(form =>
+                {
+                    if (form is IClienteSelecionavel receptor)
+                        receptor.SetCliente(cliente);
+                });
             }
             catch (Exception ex)
             {

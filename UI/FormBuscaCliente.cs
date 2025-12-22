@@ -17,6 +17,8 @@ namespace TestePraticoDevCSharp.UI
     {
         private IFormNavigator _navigator;
         private readonly ClienteService _clienteService;
+        private Cliente _clienteSelecionado;
+
         public FormBuscaCliente(ClienteService clienteService)
         {
             InitializeComponent();
@@ -32,6 +34,7 @@ namespace TestePraticoDevCSharp.UI
 
             dgvListaCliente.CurrentCellDirtyStateChanged +=
                 dgvListaCliente_CurrentCellDirtyStateChanged;
+            cbTipoPesquisa.Text = "Nome";
         }
 
         private void dgvListaCliente_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -45,7 +48,18 @@ namespace TestePraticoDevCSharp.UI
         private async void btnBuscar_Click(object sender, EventArgs e)
         {
 
-            if (cbTipoPesquisa.SelectedItem.ToString() == "Nome")
+            if (cbTipoPesquisa.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    "Selecione um tipo de pesquisa.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            if (cbTipoPesquisa.SelectedItem.ToString() == "Nome" )
             {
                 List<Cliente> clientes = await _clienteService.BuscarPorNomeAsync(txtBusca.Text);
 
@@ -62,7 +76,22 @@ namespace TestePraticoDevCSharp.UI
 
         private void btnSelecionar_Click(object sender, EventArgs e)
         {
-
+            var cliente = bsListaCliente.Current as Cliente;
+            if (cliente == null)
+            {
+                MessageBox.Show(
+                    "Nenhum cliente selecionado.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+            _navigator.Navigate<FormVenda>(form =>
+            {
+                if (form is IClienteSelecionavel receptor)
+                    receptor.SetCliente(cliente);
+            });
         }
 
         private async void btnDeletar_Click(object sender, EventArgs e)
@@ -77,9 +106,9 @@ namespace TestePraticoDevCSharp.UI
             if (resposta != DialogResult.Yes)
                 return;
 
-            var cliente = (Cliente)bsListaCliente.Current;
+            _clienteSelecionado = (Cliente)bsListaCliente.Current;
 
-            await _clienteService.DeletarAsync(cliente.Id);
+            await _clienteService.DeletarAsync(_clienteSelecionado.Id);
             bsListaCliente.RemoveCurrent();
         }
 

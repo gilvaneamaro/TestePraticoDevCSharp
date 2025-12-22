@@ -64,6 +64,12 @@ namespace TestePraticoDevCSharp.Domain.Entities
             Email = email;
             Telefone = telefone;
         }
+        public Cliente(string nome, Email email, string telefone)
+        {
+            Nome = nome;
+            Email = email;
+            Telefone = telefone;
+        }
         protected Cliente() { }
 
     }

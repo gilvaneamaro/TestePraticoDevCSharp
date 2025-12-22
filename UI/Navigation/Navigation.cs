@@ -23,6 +23,11 @@ namespace TestePraticoDevCSharp.UI.Navigation
 
         public void Navigate<TForm>() where TForm : Form
         {
+            Navigate<TForm>(null);
+        }
+
+        public void Navigate<TForm>(Action<TForm> configure) where TForm : Form
+        {
             _currentForm?.Close();
             _currentForm?.Dispose();
 
@@ -30,6 +35,8 @@ namespace TestePraticoDevCSharp.UI.Navigation
 
             if (form is INavigable navigable)
                 navigable.SetNavigator(this);
+
+            configure?.Invoke(form);
 
             _currentForm = form;
 

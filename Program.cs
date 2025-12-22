@@ -30,7 +30,7 @@ namespace TestePraticoDevCSharp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IClienteRepository, ClienteRepository>();
-
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
             // ---------- Application ----------
             services.AddScoped<ClienteService>();
             services.AddScoped<ProdutoService>();
