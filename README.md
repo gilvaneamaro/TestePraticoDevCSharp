@@ -41,19 +41,24 @@ O projeto foi estruturado seguindo princípios de **DDD (Domain-Driven Design)**
 Pré-requisitos: 
 - Docker
 - Docker Compose
-  ```
-  cd TestePraticoDevCSharp/docker/postgres
-  docker-compose up -d
-  ```
+Abra o terminal, acesse o diretório do projeto e execute o comando docker-compose para subir o container com a imagem do banco de dados:
+```
+cd TestePraticoDevCSharp/
+docker-compose up -d
+```
 O banco será inicializado automaticamente com o script SQL.
 
 ## Utilizando Banco local
+- Script 01-create-database.sql para criação das tabelas disponível em:
+```
+TestePraticoDevCSharp\docker\postgres
+```
 - O banco deve estar configurado de acordo com a string connection:
 
 ```
-	<connectionStrings>
-		<add name="PostgresConnection" connectionString="Host=localhost;Port=5432;Database=vendasdb;Username=user;Password=pass;" providerName="Npgsql" />
-	</connectionStrings>
+<connectionStrings>
+	<add name="PostgresConnection" connectionString="Host=localhost;Port=5432;Database=vendasdb;Username=user;Password=pass;" providerName="Npgsql" />
+</connectionStrings>
 ```
 
 
